@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.authentication.AuthenticationEvent;
 import com.example.tracker_task.R;
 import com.example.tracker_task.databinding.FragmentTrackerBinding;
 
@@ -22,6 +23,12 @@ public class TrackerFragment extends Fragment {
     TrackerViewModel viewModel;
 
     TrackerState state;
+
+    AuthenticationEvent authenticationEvent;
+
+    public void setAuthenticationEvent(AuthenticationEvent authenticationEvent) {
+        this.authenticationEvent = authenticationEvent;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,10 @@ public class TrackerFragment extends Fragment {
                 viewModel.onEvent(new StartTracking());
                 showTrackerOnUI();
             }
+        });
+
+        binding.toolbarExitIcon.setOnClickListener(v -> {
+            authenticationEvent.onLogOut();
         });
 
         state.getGpsStatusListener().observe(getViewLifecycleOwner(), isGpsEnabled -> {

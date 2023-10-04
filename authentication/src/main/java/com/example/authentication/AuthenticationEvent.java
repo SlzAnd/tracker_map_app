@@ -1,10 +1,15 @@
 package com.example.authentication;
 
-public interface AuthenticationEvent {
+import com.google.firebase.auth.FirebaseAuth;
 
-    public void onSuccessLogin();
-    public void onSuccessRegistration();
-    public void onChangeToLoginScreen();
+public abstract class AuthenticationEvent {
 
-    public void onChangeToRegisterScreen();
+    abstract protected void onSuccessLogin();
+    abstract protected void onSuccessRegistration();
+    abstract protected void onChangeToLoginScreen();
+    abstract protected void onChangeToRegisterScreen();
+    public void onLogOut(){
+        FirebaseAuth.getInstance().signOut();
+        onChangeToLoginScreen();
+    }
 }

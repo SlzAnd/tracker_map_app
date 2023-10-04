@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginFragment.setAuthenticationEvent(authenticationEvent);
         registerFragment.setAuthenticationEvent(authenticationEvent);
+        trackerFragment.setAuthenticationEvent(authenticationEvent);
 
         // first-viewed fragment - Login
         FragmentTransaction transaction = fragmentManager.beginTransaction();
