@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/web_orange"
+    tools:context=".BaseFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/web_orange"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poppins_500"
+            android:paddingBottom="9dp"
+            android:text="@string/sign_in_title"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/input_card"
+        style="@style/CustomCardViewStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_name_input_layout"
+                style="@style/CustomTextInputLayout.FilledBox"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="62dp"
+                android:hint="@string/user_name_hint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_name_edit_text"
+                    style="@style/CustomTextInputEditText.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input_layout"
+                style="@style/CustomTextInputLayout.FilledBox"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="22dp"
+                android:hint="@string/password_hint"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_edit_text"
+                    style="@style/CustomTextInputEditText.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/forgot_pass_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="29dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/poppins_500"
+                android:text="@string/forgot_pass"
+                android:textColor="@color/web_orange"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/auth_button"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="59dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="81dp"
+                android:backgroundTint="@color/gray"
+                app:cornerRadius="10dp"
+                android:text="@string/sign_in_button_text"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_500"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/bottom_nav_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_500"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_card" />
+
+    <TextView
+        android:id="@+id/bottom_nav_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_600"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottom_nav_message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

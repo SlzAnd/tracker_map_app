@@ -14,5 +14,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "tracker_task"
-include(":app")
- 
+include(":tracker_app")
+include(":authentication")
+include(":map_app")

@@ -1,0 +1,33 @@
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="0"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="360">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:aapt="http://schemas.android.com/aapt"
+        android:width="147dp"
+        android:height="147dp"
+        android:viewportWidth="147"
+        android:viewportHeight="147">
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M73.5,73.5m-65,0a65,65 0,1 1,130 0a65,65 0,1 1,-130 0"
+            android:strokeWidth="16"
+            android:strokeColor="#F7F7FA" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M8.5,73.5C8.5,85.37 11.68,96.5 17.24,106.08C23.08,116.13 31.53,124.48 41.67,130.19C51.08,135.48 61.94,138.5 73.5,138.5C85.06,138.5 95.92,135.48 105.33,130.19C115.47,124.48 123.92,116.13 129.76,106.08C135.32,96.5 138.5,85.37 138.5,73.5C138.5,63.45 136.22,53.94 132.15,45.45C126.36,33.37 116.95,23.35 105.33,16.81C95.92,11.52 85.06,8.5 73.5,8.5"
+            android:strokeWidth="16"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round">
+            <aapt:attr name="android:strokeColor">
+                <gradient
+                    android:angle="10"
+                    android:centerColor="#BC512F"
+                    android:shape="ring"
+                    android:startColor="#FFC077"
+                    android:type="sweep" />
+            </aapt:attr>
+        </path>
+    </vector>
+</rotate>
