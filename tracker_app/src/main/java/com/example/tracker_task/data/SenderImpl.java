@@ -13,6 +13,7 @@ import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.authentication.CurrentUserInfo;
 import com.example.tracker_task.data.data_source.LocationDAO;
 import com.example.tracker_task.domain.model.MyLocation;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,10 +49,13 @@ public class SenderImpl implements Sender {
     }
 
     private static void sendToFirebase(Map<String, Double> data) {
-        firestore.collection("locations")
-                .add(data)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        String userUID = CurrentUserInfo.getUserUID();
+        if (userUID != null) {
+            firestore.collection(userUID)
+                    .add(data)
+                    .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        }
     }
 
     @Override
