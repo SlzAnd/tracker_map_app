@@ -16,6 +16,7 @@ import androidx.work.WorkerParameters;
 import com.example.authentication.CurrentUserInfo;
 import com.example.tracker_task.data.data_source.LocationDAO;
 import com.example.tracker_task.domain.model.MyLocation;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -41,14 +42,14 @@ public class SenderImpl implements Sender {
 
     @Override
     public void sendToFirebaseImmediately(Location location) {
-        Map<String, Double> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("latitude", location.getLatitude());
         data.put("longitude", location.getLongitude());
-
+        data.put("time", Timestamp.now());
         sendToFirebase(data);
     }
 
-    private static void sendToFirebase(Map<String, Double> data) {
+    private static void sendToFirebase(Map<String, Object> data) {
         String userUID = CurrentUserInfo.getUserUID();
         if (userUID != null) {
             firestore.collection(userUID)
@@ -91,15 +92,15 @@ public class SenderImpl implements Sender {
         @Override
         public Result doWork() {
             List<MyLocation> myLocations = dao.getAllLocations();
-            List<HashMap<String, Double>> dataList = new ArrayList<>();
-
+            List<HashMap<String, Object>> dataList = new ArrayList<>();
             Log.d(TAG, "" + myLocations);
 
             if (!myLocations.isEmpty()) {
                 myLocations.forEach(myLocation -> {
-                    HashMap<String, Double> location = new HashMap<>();
+                    HashMap<String, Object> location = new HashMap<>();
                     location.put("latitude", myLocation.latitude);
                     location.put("longitude", myLocation.longitude);
+                    location.put("time", Timestamp.now());
                     dataList.add(location);
                 });
 

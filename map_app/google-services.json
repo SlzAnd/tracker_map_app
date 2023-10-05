@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "646255373411",
+    "project_id": "tracker-3b1fe",
+    "storage_bucket": "tracker-3b1fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646255373411:android:acaf3822c80e37f29d5c56",
+        "android_client_info": {
+          "package_name": "com.example.map_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLoAuvYfHk24cCpAHTOZNnvF2-llz5_4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646255373411:android:38532d48ac4cfab19d5c56",
+        "android_client_info": {
+          "package_name": "com.example.tracker_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLoAuvYfHk24cCpAHTOZNnvF2-llz5_4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
