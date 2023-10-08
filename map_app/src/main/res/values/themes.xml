@@ -2,7 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Tracker_task" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/web_orange</item>
+        <item name="colorSecondary">@color/web_orange</item>
+        <item name="android:statusBarColor">@color/web_orange</item>
     </style>
 
     <style name="Theme.Tracker_task" parent="Base.Theme.Tracker_task" />

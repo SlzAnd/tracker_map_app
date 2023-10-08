@@ -8,7 +8,7 @@ public abstract class AuthenticationEvent {
     abstract protected void onSuccessRegistration();
     abstract protected void onChangeToLoginScreen();
     abstract protected void onChangeToRegisterScreen();
-    public void onLogOut(){
+    public void logOut(){
         FirebaseAuth.getInstance().signOut();
         onChangeToLoginScreen();
     }

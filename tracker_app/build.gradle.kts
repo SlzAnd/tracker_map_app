@@ -79,7 +79,6 @@ dependencies {
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
-    implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
 
     implementation("com.google.android.gms:play-services-location:21.0.1")
@@ -91,8 +90,8 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    annotationProcessor("com.google.dagger:hilt-compiler:2.48.1")
 
     //WorkManager
     implementation("androidx.work:work-runtime:2.8.1")

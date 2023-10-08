@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">map_app</string>
+    <string name="timeline">Timeline</string>
+    <string name="last_24_h">Last 24 Hours</string>
 </resources>

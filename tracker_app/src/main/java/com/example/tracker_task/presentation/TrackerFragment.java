@@ -58,7 +58,7 @@ public class TrackerFragment extends Fragment {
         });
 
         binding.toolbarExitIcon.setOnClickListener(v -> {
-            authenticationEvent.onLogOut();
+            authenticationEvent.logOut();
         });
 
         state.getGpsStatusListener().observe(getViewLifecycleOwner(), isGpsEnabled -> {
