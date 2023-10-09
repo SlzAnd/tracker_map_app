@@ -9,10 +9,8 @@ public class TrackerState {
 
     private LiveData<Boolean> gpsStatusListener = null;
 
-
     public TrackerState() {
     }
-
 
     public boolean isTracking() {
         return isTracking;
