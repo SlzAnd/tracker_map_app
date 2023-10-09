@@ -1,11 +1,15 @@
 package com.example.tracker_task.presentation;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,8 +49,22 @@ public class TrackerFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            hideNeedPermissionMessage();
+        } else {
+            showNeedPermissionMessage();
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         binding.startStopButton.setOnClickListener(v -> {
             if (state.isTracking()) {
                 viewModel.onEvent(new StopTracking());
@@ -102,6 +120,20 @@ public class TrackerFragment extends Fragment {
         binding.startStopButton.setTextColor(0xffFFFFFF);
         binding.startStopButton.setBackgroundTintList(ColorStateList.valueOf(0xffFFAA00));
         binding.startStopButton.setEnabled(false);
+    }
+
+    private void showNeedPermissionMessage() {
+        binding.startStopButton.setEnabled(false);
+        binding.startStopButton.setBackgroundColor(Color.GRAY);
+        binding.startStopButton.setStrokeColor(ColorStateList.valueOf(Color.RED));
+        binding.permissionMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNeedPermissionMessage() {
+        binding.startStopButton.setEnabled(true);
+        binding.startStopButton.setBackgroundColor(getResources().getColor(R.color.web_orange));
+        binding.startStopButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.web_orange)));
+        binding.permissionMessage.setVisibility(View.GONE);
     }
 
     @Override

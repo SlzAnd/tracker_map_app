@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.tracker_task.data.datastore.StoreSettings;
 import com.example.tracker_task.domain.use_case.TrackerUseCases;
 
-import java.util.NoSuchElementException;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -25,7 +23,7 @@ public class TrackerViewModel extends ViewModel {
         try {
             boolean isTracking = dataStore.getIsTracking().blockingFirst();
             _state.setTracking(isTracking);
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             _state.setTracking(false);
         }
         _state.setGpsStatusListener(useCases.getGpsStatusUseCase().execute());

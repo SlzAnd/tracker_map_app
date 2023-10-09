@@ -19,7 +19,7 @@ import java.time.LocalDate;
 
 public class CalendarDialog extends DialogFragment {
     DialogCalendarBinding binding = null;
-    LocalDate selectedDate;
+    LocalDate selectedDate = LocalDate.now();
 
     private static final String TAG = "CalendarDialog";
 

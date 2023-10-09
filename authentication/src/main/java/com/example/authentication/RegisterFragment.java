@@ -63,7 +63,7 @@ public class RegisterFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         authenticationEvent.onSuccessRegistration();
                     } else {
-                        Toast.makeText(getContext(), "Authentication failed",
+                        Toast.makeText(getContext(), "Authentication failed: " + task.getResult().toString(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

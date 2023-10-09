@@ -8,4 +8,5 @@
     <string name="gps_off">GPS IS OFF</string>
     <string name="cant_collect">Tracker can\'t collect locations</string>
     <string name="stop_button_text">STOP</string>
+    <string name="permission_message">For using this app you should granted location permission</string>
 </resources>

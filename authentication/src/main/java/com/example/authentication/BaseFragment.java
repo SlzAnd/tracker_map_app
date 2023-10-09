@@ -16,6 +16,8 @@ import com.example.authentication.databinding.FragmentBaseBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.regex.Pattern;
+
 abstract class BaseFragment extends Fragment {
 
     private FragmentBaseBinding binding;
@@ -70,16 +72,24 @@ abstract class BaseFragment extends Fragment {
             String password = String.valueOf(passwordEditText.getText());
 
             if (TextUtils.isEmpty(email)) {
-                emailInputLayout.setError("Error email");
+                emailInputLayout.setError("Error email. Email can't be empty");
                 return;
             } else {
+                if (!isValidEmail(email)) {
+                    emailInputLayout.setError("Error email. Enter the correct email");
+                    return;
+                }
                 emailInputLayout.setError(null);
             }
 
             if (TextUtils.isEmpty(password)) {
-                passwordInputLayout.setError("Error password");
+                passwordInputLayout.setError("Error password. Password can't be empty");
                 return;
             } else {
+                if (password.length() < 6) {
+                    passwordInputLayout.setError("Error password. Password should be at least 6 symbols");
+                    return;
+                }
                 passwordInputLayout.setError(null);
             }
 
@@ -95,5 +105,11 @@ abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         binding = null;
         super.onDestroyView();
+    }
+
+    private boolean isValidEmail(String email) {
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        return Pattern.compile(regexPattern).matcher(email).matches();
     }
 }
