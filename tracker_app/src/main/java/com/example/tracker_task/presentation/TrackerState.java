@@ -1,6 +1,7 @@
 package com.example.tracker_task.presentation;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.Objects;
 
@@ -8,6 +9,8 @@ public class TrackerState {
     private boolean isTracking = false;
 
     private LiveData<Boolean> gpsStatusListener = null;
+    private MutableLiveData<Boolean> _isPermissionGranted = new MutableLiveData<>(true);
+    private LiveData<Boolean> isPermissionGranted = _isPermissionGranted;
 
     public TrackerState() {
     }
@@ -26,6 +29,14 @@ public class TrackerState {
 
     public void setGpsStatusListener(LiveData<Boolean> gpsStatusListener) {
         this.gpsStatusListener = gpsStatusListener;
+    }
+
+    public LiveData<Boolean> isPermissionGranted() {
+        return isPermissionGranted;
+    }
+
+    public void set_isPermissionGranted(boolean isPermissionGranted) {
+        this._isPermissionGranted.postValue(isPermissionGranted);
     }
 
     @Override
