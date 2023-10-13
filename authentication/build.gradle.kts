@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("maven-publish")
+    id("kotlin-android")
 }
 
 android {
@@ -29,10 +30,6 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
     }
     publishing {
         singleVariant("release") {

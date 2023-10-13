@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".java.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/maps_fragment_container"
-        android:name="com.example.map_app.presentation.MapFragment"
+        android:name="com.example.map_app.java.presentation.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

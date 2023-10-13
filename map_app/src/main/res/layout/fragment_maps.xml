@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:context=".presentation.MapFragment" />
+        tools:context=".java.presentation.MapFragment" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_bar"
@@ -91,7 +91,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/calendar_dialog"
-        android:name="com.example.map_app.presentation.CalendarDialog"
+        android:name="com.example.map_app.java.presentation.CalendarDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
