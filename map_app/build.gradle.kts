@@ -2,7 +2,9 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt") version "1.9.10"
 }
 
 android {
@@ -30,11 +32,13 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
@@ -50,6 +54,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:+")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -65,9 +70,14 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     annotationProcessor("com.google.dagger:hilt-compiler:2.48.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
 
     //RxJava and RxAndroid
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+
+    implementation("androidx.activity:activity-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.core:core-ktx:1.12.0")
 }
 

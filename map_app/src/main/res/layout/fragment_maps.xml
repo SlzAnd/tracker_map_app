@@ -91,7 +91,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/calendar_dialog"
-        android:name="com.example.map_app.java.presentation.CalendarDialog"
+        android:name="com.example.map_app.kotlin.presentation.CalendarDialogKt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
