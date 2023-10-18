@@ -8,8 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TrackerRepositoryImplKt(
+class TrackerRepositoryImplKt @Inject constructor(
     private val context: Context,
     private val locationClient: LocationClientKt,
     private val gpsStatusListener: GpsStatusListenerKt,

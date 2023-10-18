@@ -8,8 +8,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class StoreSettingsKt(private val context: Context) {
+class StoreSettingsKt @Inject constructor(
+    private val context: Context
+) {
 
     companion object {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
@@ -19,13 +22,13 @@ class StoreSettingsKt(private val context: Context) {
     }
 
     fun getIsTracking(): Flow<Boolean> {
-        return context.dataStore.data.map {preferences ->
+        return context.dataStore.data.map { preferences ->
             preferences[IS_TRACKING] ?: false
         }
     }
 
     suspend fun setIsTracking(isTracking: Boolean) {
-        context.dataStore.edit {pref ->
+        context.dataStore.edit { pref ->
             pref[IS_TRACKING] = isTracking
         }
     }

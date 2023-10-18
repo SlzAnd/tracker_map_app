@@ -1,15 +1,12 @@
 package com.example.map_app.kotlin.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.PolylineOptions
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
-data class MapStateKt(
-    var isShownDialog: Boolean = false,
-    val _selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now()),
-    val selectedDate: LiveData<LocalDate> = _selectedDate,
-) {
-    fun setDate(date: LocalDate) {
-        _selectedDate.postValue(date)
-    }
+sealed class MapStateKt {
+
+    data object ShowDialog : MapStateKt()
+    data object HideDialog : MapStateKt()
+    data class ShowPath(val flow: Flow<PolylineOptions>, val date: LocalDate) : MapStateKt()
 }

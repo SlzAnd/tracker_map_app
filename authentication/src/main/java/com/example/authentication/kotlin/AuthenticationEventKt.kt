@@ -2,14 +2,16 @@ package com.example.authentication.kotlin
 
 import com.google.firebase.auth.FirebaseAuth
 
-abstract class AuthenticationEventKt {
-    abstract fun onSuccessLogin()
-    abstract fun onSuccessRegistration()
-    abstract fun onChangeToLoginScreen()
-    abstract fun onChangeToRegisterScreen()
+interface AuthenticationEventKt {
+
+    fun onSuccessLogin()
+    fun onSuccessRegistration()
+    fun onChangeToLoginScreen()
+    fun onChangeToRegisterScreen()
+    fun onLogOut()
 
     fun logOut() {
         FirebaseAuth.getInstance().signOut()
-        onChangeToLoginScreen()
+        onLogOut()
     }
 }

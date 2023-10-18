@@ -7,8 +7,9 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import androidx.lifecycle.LiveData
 import com.example.tracker_task.kotlin.isLocationEnabled
+import javax.inject.Inject
 
-class GpsStatusListenerKt(
+class GpsStatusListenerKt @Inject constructor(
     private val context: Context
 ) : LiveData<Boolean>() {
     override fun onActive() {

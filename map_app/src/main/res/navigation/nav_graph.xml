@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragmentKt">
+
+    <fragment
+        android:id="@+id/loginFragmentKt"
+        android:name="com.example.authentication.kotlin.LoginFragmentKt"
+        android:label="LoginFragmentKt">
+        <action
+            android:id="@+id/action_loginFragmentKt_to_registerFragmentKt"
+            app:destination="@id/registerFragmentKt" />
+        <action
+            android:id="@+id/action_loginFragmentKt_to_mapFragmentKt"
+            app:destination="@id/mapFragmentKt" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragmentKt"
+        android:name="com.example.authentication.kotlin.RegisterFragmentKt"
+        android:label="RegisterFragmentKt">
+        <action
+            android:id="@+id/action_registerFragmentKt_to_loginFragmentKt"
+            app:destination="@id/loginFragmentKt" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragmentKt"
+        android:name="com.example.map_app.kotlin.presentation.MapFragmentKt"
+        android:label="MapFragmentKt">
+        <action
+            android:id="@+id/action_mapFragmentKt_to_loginFragmentKt"
+            app:destination="@id/loginFragmentKt" />
+    </fragment>
+</navigation>

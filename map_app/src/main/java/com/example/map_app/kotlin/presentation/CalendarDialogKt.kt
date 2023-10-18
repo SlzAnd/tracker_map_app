@@ -15,7 +15,7 @@ import java.time.LocalDate
 class CalendarDialogKt : DialogFragment() {
 
     private var binding: DialogCalendarBinding? = null
-    private lateinit var datePickerEventListener: DatePickerEventListener
+    private var datePickerEventListener: DatePickerEventListener? = null
     private var selectedDate = LocalDate.now()
 
     private val TAG = "CalendarDialogKt"
@@ -58,8 +58,8 @@ class CalendarDialogKt : DialogFragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                datePickerEventListener.onSelectDate(selectedDate)
-                datePickerEventListener.onCloseDialog()
+                datePickerEventListener?.onSelectDate(selectedDate)
+                datePickerEventListener?.onCloseDialog()
             }
         }
     }

@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.authentication.kotlin.AuthenticationEventKt
 import com.example.tracker_task.R
 import com.example.tracker_task.databinding.FragmentTrackerBinding
@@ -26,10 +27,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class TrackerFragmentKt : Fragment() {
     private var binding: FragmentTrackerBinding? = null
     private val viewModel: TrackerViewModelKt by viewModels()
-    private lateinit var state: TrackerStateKt
-    lateinit var authenticationEvent: AuthenticationEventKt
-
+    private var state: TrackerStateKt? = null
     private var dialog: AlertDialog? = null
+
+    companion object {
+        private var authenticationEvent: AuthenticationEventKt? = null
+        fun setAuthenticationEvent(event: AuthenticationEventKt) {
+            authenticationEvent = event
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +65,8 @@ class TrackerFragmentKt : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding!!.startStopButton.setOnClickListener {
-            if (state.isPermissionGranted.value!!) {
-                if (state.isTracking) {
+            if (state!!.isPermissionGranted.value!!) {
+                if (state!!.isTracking) {
                     viewModel.onEvent(TrackerEventKt.StopTrackingKt)
                     showTrackerOffUI()
                 } else {
@@ -73,13 +79,15 @@ class TrackerFragmentKt : Fragment() {
             }
         }
 
-        binding!!.toolbarExitIcon.setOnClickListener { authenticationEvent.logOut() }
+        binding!!.toolbarExitIcon.setOnClickListener {
+            authenticationEvent?.logOut()
+        }
 
-        state.gpsStatusListener?.observe(viewLifecycleOwner) { isGpsEnabled ->
+        state!!.gpsStatusListener?.observe(viewLifecycleOwner) { isGpsEnabled ->
             if (!isGpsEnabled) {
                 showGPSOffUI()
             } else {
-                if (state.isTracking) {
+                if (state!!.isTracking) {
                     showTrackerOnUI()
                 } else {
                     showTrackerOffUI()
@@ -87,7 +95,7 @@ class TrackerFragmentKt : Fragment() {
             }
         }
 
-        state.isPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
+        state!!.isPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
             if (isGranted) {
                 hideNeedPermissionMessage()
             } else {
@@ -198,5 +206,4 @@ class TrackerFragmentKt : Fragment() {
         binding = null
         super.onDestroyView()
     }
-
 }

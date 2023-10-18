@@ -1,30 +1,29 @@
 package com.example.authentication.kotlin
 
-import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginFragmentKt: BaseFragmentKt() {
+class LoginFragmentKt : BaseFragmentKt() {
 
-    private lateinit var mAuth: FirebaseAuth
-    lateinit var authenticationEvent: AuthenticationEventKt
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mAuth = FirebaseAuth.getInstance()
+    companion object {
+        private var authenticationEvent: AuthenticationEventKt? = null
+        fun setAuthenticationEvent(event: AuthenticationEventKt) {
+            authenticationEvent = event
+        }
     }
 
     override fun onStart() {
         super.onStart()
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
-            authenticationEvent.onSuccessLogin()
+            authenticationEvent?.onSuccessLogin()
         }
     }
-
 
     override fun getTitle(): String {
         return "Sign in"
@@ -50,7 +49,7 @@ class LoginFragmentKt: BaseFragmentKt() {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task: Task<AuthResult?> ->
                 if (task.isSuccessful) {
-                    authenticationEvent.onSuccessLogin()
+                    authenticationEvent?.onSuccessLogin()
                 } else {
                     Toast.makeText(
                         requireContext(),
@@ -62,6 +61,6 @@ class LoginFragmentKt: BaseFragmentKt() {
     }
 
     override fun onClickLinkEvent() {
-        authenticationEvent.onChangeToRegisterScreen()
+        authenticationEvent?.onChangeToRegisterScreen()
     }
 }

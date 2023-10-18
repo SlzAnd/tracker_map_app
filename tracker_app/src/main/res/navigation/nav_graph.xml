@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragmentKt">
+
+    <fragment
+        android:id="@+id/loginFragmentKt"
+        android:name="com.example.authentication.kotlin.LoginFragmentKt"
+        android:label="LoginFragmentKt">
+        <action
+            android:id="@+id/action_loginFragmentKt_to_registerFragmentKt"
+            app:destination="@id/registerFragmentKt" />
+        <action
+            android:id="@+id/action_loginFragmentKt_to_trackerFragmentKt"
+            app:destination="@id/trackerFragmentKt" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragmentKt"
+        android:name="com.example.authentication.kotlin.RegisterFragmentKt"
+        android:label="RegisterFragmentKt">
+        <action
+            android:id="@+id/action_registerFragmentKt_to_loginFragmentKt"
+            app:destination="@id/loginFragmentKt" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trackerFragmentKt"
+        android:name="com.example.tracker_task.kotlin.presentation.TrackerFragmentKt"
+        android:label="fragment_tracker"
+        tools:layout="@layout/fragment_tracker">
+        <action
+            android:id="@+id/logOutNavigateToLogin"
+            app:destination="@id/loginFragmentKt" />
+    </fragment>
+</navigation>

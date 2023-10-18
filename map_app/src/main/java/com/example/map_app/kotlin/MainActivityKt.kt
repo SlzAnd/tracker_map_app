@@ -2,10 +2,11 @@ package com.example.map_app.kotlin
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
 import com.example.authentication.kotlin.AuthenticationEventKt
 import com.example.authentication.kotlin.LoginFragmentKt
 import com.example.authentication.kotlin.RegisterFragmentKt
+import com.example.map_app.R
 import com.example.map_app.databinding.ActivityMainBinding
 import com.example.map_app.kotlin.presentation.MapFragmentKt
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,55 +15,43 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivityKt : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
-    private lateinit var authenticationEvent: AuthenticationEventKt
-
+    private var authenticationEvent: AuthenticationEventKt? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        // fragments
-        val loginFragment = LoginFragmentKt()
-        val registerFragment = RegisterFragmentKt()
-        val mapFragment = MapFragmentKt()
-
-        val fragmentManager = supportFragmentManager
-
-        authenticationEvent = object : AuthenticationEventKt() {
+        authenticationEvent = object : AuthenticationEventKt {
             override fun onSuccessLogin() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding!!.mapsFragmentContainer.id, mapFragment)
-                transaction.commit()
+                Navigation.findNavController(binding!!.fragmentContainerView)
+                    .navigate(R.id.action_loginFragmentKt_to_mapFragmentKt)
             }
 
             override fun onSuccessRegistration() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding!!.mapsFragmentContainer.id, loginFragment)
-                transaction.commit()
+                Navigation.findNavController(binding!!.fragmentContainerView)
+                    .navigate(R.id.action_registerFragmentKt_to_loginFragmentKt)
             }
 
             override fun onChangeToLoginScreen() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding!!.mapsFragmentContainer.id, loginFragment)
-                transaction.commit()
+                Navigation.findNavController(binding!!.fragmentContainerView)
+                    .navigate(R.id.action_registerFragmentKt_to_loginFragmentKt)
             }
 
             override fun onChangeToRegisterScreen() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding!!.mapsFragmentContainer.id, registerFragment)
-                transaction.commit()
+                Navigation.findNavController(binding!!.fragmentContainerView)
+                    .navigate(R.id.action_loginFragmentKt_to_registerFragmentKt)
+            }
+
+            override fun onLogOut() {
+                Navigation.findNavController(binding!!.fragmentContainerView)
+                    .navigate(R.id.action_mapFragmentKt_to_loginFragmentKt)
             }
         }
 
-        loginFragment.authenticationEvent = authenticationEvent
-        registerFragment.authenticationEvent = authenticationEvent
-        mapFragment.authenticationEvent = authenticationEvent
-
-        // first-viewed fragment - Login
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(binding!!.mapsFragmentContainer.id, loginFragment)
-        transaction.commit()
+        LoginFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
+        RegisterFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
+        MapFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
     }
 
     override fun onDestroy() {

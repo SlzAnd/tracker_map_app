@@ -32,8 +32,8 @@ object TrackerModuleKt {
 
     @Provides
     @Singleton
-    fun provideFusedLocationProviderClient(@ApplicationContext appContext: Context?): FusedLocationProviderClient {
-        return LocationServices.getFusedLocationProviderClient(appContext!!)
+    fun provideFusedLocationProviderClient(@ApplicationContext appContext: Context): FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(appContext)
     }
 
     @Provides
@@ -106,5 +106,11 @@ object TrackerModuleKt {
     @Singleton
     fun provideDataStore(@ApplicationContext context: Context): StoreSettingsKt {
         return StoreSettingsKt(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context {
+        return context
     }
 }

@@ -4,10 +4,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
 import com.example.authentication.kotlin.AuthenticationEventKt
 import com.example.authentication.kotlin.LoginFragmentKt
 import com.example.authentication.kotlin.RegisterFragmentKt
+import com.example.tracker_task.R
 import com.example.tracker_task.databinding.ActivityMainBinding
 import com.example.tracker_task.kotlin.presentation.TrackerEventKt
 import com.example.tracker_task.kotlin.presentation.TrackerFragmentKt
@@ -18,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivityKt : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TrackerViewModelKt by viewModels()
-    private lateinit var authenticationEvent: AuthenticationEventKt
+    private var authenticationEvent: AuthenticationEventKt? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,47 +27,36 @@ class MainActivityKt : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // fragments
-        val loginFragment = LoginFragmentKt()
-        val registerFragment = RegisterFragmentKt()
-        val trackerFragment = TrackerFragmentKt()
-
-        val fragmentManager = supportFragmentManager
-
-        authenticationEvent = object : AuthenticationEventKt() {
+        authenticationEvent = object : AuthenticationEventKt {
             override fun onSuccessLogin() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding.trackerFragmentContainer.id, trackerFragment)
-                transaction.commit()
+                Navigation.findNavController(binding.fragmentContainerView)
+                    .navigate(R.id.action_loginFragmentKt_to_trackerFragmentKt)
             }
 
             override fun onSuccessRegistration() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding.trackerFragmentContainer.id, loginFragment)
-                transaction.commit()
+                Navigation.findNavController(binding.fragmentContainerView)
+                    .navigate(R.id.action_registerFragmentKt_to_loginFragmentKt)
             }
 
             override fun onChangeToLoginScreen() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding.trackerFragmentContainer.id, loginFragment)
-                transaction.commit()
+                Navigation.findNavController(binding.fragmentContainerView)
+                    .navigate(R.id.action_registerFragmentKt_to_loginFragmentKt)
             }
 
             override fun onChangeToRegisterScreen() {
-                val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-                transaction.replace(binding.trackerFragmentContainer.id, registerFragment)
-                transaction.commit()
+                Navigation.findNavController(binding.fragmentContainerView)
+                    .navigate(R.id.action_loginFragmentKt_to_registerFragmentKt)
+            }
+
+            override fun onLogOut() {
+                Navigation.findNavController(binding.fragmentContainerView)
+                    .navigate(R.id.logOutNavigateToLogin)
             }
         }
 
-        loginFragment.authenticationEvent = authenticationEvent
-        registerFragment.authenticationEvent = authenticationEvent
-        trackerFragment.authenticationEvent = authenticationEvent
-
-        // first-viewed fragment - Login
-        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        transaction.replace(binding.trackerFragmentContainer.id, loginFragment)
-        transaction.commit()
+        LoginFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
+        RegisterFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
+        TrackerFragmentKt.setAuthenticationEvent(authenticationEvent as AuthenticationEventKt)
     }
 
     override fun onRequestPermissionsResult(
