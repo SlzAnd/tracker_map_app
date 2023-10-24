@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="MainActivityKtTest">
+        <State />
+      </entry>
+      <entry key="MapFragmentTest">
+        <State />
+      </entry>
       <entry key="map_app">
         <State>
           <targetSelectedWithDropDown>
@@ -17,6 +23,15 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2023-10-14T07:04:41.505570205Z" />
         </State>
+      </entry>
+      <entry key="test_selectingCorrectDateDisplayOnTheBottomMessage()">
+        <State />
+      </entry>
+      <entry key="test_selectingFutureDateImpossible()">
+        <State />
+      </entry>
+      <entry key="test_selectingFutureDateShowErrorToast()">
+        <State />
       </entry>
       <entry key="tracker_app">
         <State>
