@@ -257,6 +257,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="487583116">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_6a_API_32_for_tests" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="652288559">
           <value>
             <AndroidTestResultsTableState>
@@ -377,6 +390,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1379773933">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_6a_API_32_for_tests" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1534929256">
           <value>
             <AndroidTestResultsTableState>
@@ -391,6 +417,19 @@
           </value>
         </entry>
         <entry key="1539534710">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_6a_API_32_for_tests" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1639284984">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">

@@ -2,11 +2,33 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainActivityKtTest">
+      <entry key="LocationDaoTest">
         <State />
       </entry>
-      <entry key="MapFragmentTest">
+      <entry key="PermissionNotGrantedUITest">
         <State />
+      </entry>
+      <entry key="SuccessTrackingScreenTest">
+        <State />
+      </entry>
+      <entry key="TrackerFragmentNavigationTest">
+        <State />
+      </entry>
+      <entry key="TurnOffDeviceLocationTest">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/Pixel_7_API_31_12_Android_.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2023-10-26T08:57:22.208149304Z" />
+        </State>
       </entry>
       <entry key="map_app">
         <State>
@@ -23,15 +45,6 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2023-10-14T07:04:41.505570205Z" />
         </State>
-      </entry>
-      <entry key="test_selectingCorrectDateDisplayOnTheBottomMessage()">
-        <State />
-      </entry>
-      <entry key="test_selectingFutureDateImpossible()">
-        <State />
-      </entry>
-      <entry key="test_selectingFutureDateShowErrorToast()">
-        <State />
       </entry>
       <entry key="tracker_app">
         <State>

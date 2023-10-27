@@ -30,8 +30,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     publishing {
         singleVariant("release") {
@@ -57,6 +61,7 @@ dependencies {
     testImplementation("androidx.test:runner:1.5.2")
     testImplementation("io.mockk:mockk-android:1.13.8")
     testImplementation("io.mockk:mockk-agent:1.13.8")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
     testAnnotationProcessor("com.google.dagger:dagger-compiler:2.48.1")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -79,6 +84,16 @@ dependencies {
 
     implementation("io.mockk:mockk-android:1.13.8")
     implementation("io.mockk:mockk-agent:1.13.8")
+
+    // Compose
+    val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    // Material Design 3
+    implementation("androidx.compose.material3:material3")
 }
 
 publishing {
