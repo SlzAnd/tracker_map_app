@@ -4,8 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -14,13 +12,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.authentication.kotlin.AuthenticationEventKt
+import com.example.authentication.ui.theme.poppinsFontFamily
 import com.example.tracker_task.R
 import com.example.tracker_task.databinding.FragmentTrackerBinding
 import com.example.tracker_task.kotlin.hasLocationPermission
+import com.example.tracker_task.kotlin.ui.theme.webOrange
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,98 +90,144 @@ class TrackerFragmentKt : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding!!.startStopButton.setOnClickListener {
-            if (state!!.isPermissionGranted.value!!) {
+        binding!!.composeTrackerFragment.setContent {
+
+            val start = stringResource(id = R.string.start_button_text)
+            val stop = stringResource(id = R.string.stop_button_text)
+            var buttonColor by rememberSaveable { mutableLongStateOf(0xffFFAA00) }
+            var buttonBorderColor by rememberSaveable { mutableLongStateOf(0xffFFAA00) }
+            var buttonText by rememberSaveable { mutableStateOf(start) }
+            var buttonTextColor by rememberSaveable { mutableLongStateOf(0xFFFFFFFF) }
+            var isPermissionGranted by rememberSaveable { mutableStateOf(false) }
+            var isGpsOff by rememberSaveable { mutableStateOf(false) }
+
+            fun showTrackerOnUI() {
+                buttonColor = 0xFFFFFFFF //white
+                buttonText = stop
+                buttonTextColor = 0xffFFAA00 //web_orange
+            }
+
+            fun showTrackerOffUI() {
+                buttonColor = 0xffFFAA00 //web_orange
+                buttonText = start
+                buttonTextColor = 0xFFFFFFFF //white
+            }
+
+            fun showNeedPermissionButtonUI() {
+                buttonColor = 0xffACACAC // grey
+                buttonBorderColor = 0xffFF0000 // red
+            }
+
+            fun hideNeedPermissionButtonUI() {
+                dialog?.hide()
                 if (state!!.isTracking) {
-                    viewModel.onEvent(TrackerEventKt.StopTrackingKt)
-                    showTrackerOffUI()
-                } else {
-                    viewModel.onEvent(TrackerEventKt.StartTrackingKt)
-                    showTrackerOnUI()
-                }
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                askUserForOpeningAppSettings()
-            }
-        }
-
-        binding!!.toolbarExitIcon.setOnClickListener {
-            authenticationEvent?.logOut()
-        }
-
-        state!!.gpsStatusListener?.observe(viewLifecycleOwner) { isGpsEnabled ->
-            if (!isGpsEnabled) {
-                showGPSOffUI()
-            } else {
-                if (state!!.isTracking) {
                     showTrackerOnUI()
                 } else {
                     showTrackerOffUI()
                 }
+                buttonBorderColor = 0xffFFAA00 //web_orange
+            }
+
+            state!!.gpsStatusListener?.observe(viewLifecycleOwner) { isGpsEnabled ->
+                isGpsOff = !isGpsEnabled
+            }
+
+            state!!.isPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
+                isPermissionGranted = isGranted
+            }
+
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        modifier = Modifier,
+                        exitButtonEvent = { authenticationEvent?.logOut() }
+                    )
+                }
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                        .background(Color.White),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 185.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        if (isGpsOff) {
+                            GpsOffIcon()
+                        } else {
+                            if (state!!.isTracking) {
+                                TrackerOnIcon()
+                            } else {
+                                TrackerOffIcon()
+                            }
+                        }
+
+                        if (!isPermissionGranted) {
+                            showNeedPermissionButtonUI()
+                            Text(
+                                modifier = Modifier
+                                    .padding(top = 20.dp),
+                                text = stringResource(id = R.string.permission_message),
+                                fontFamily = poppinsFontFamily,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.W600,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center
+                            )
+                        } else {
+                            hideNeedPermissionButtonUI()
+                        }
+                    }
+
+                    Button(
+                        modifier = Modifier
+                            .padding(bottom = 81.dp)
+                            .width(315.dp)
+                            .height(62.dp),
+                        onClick = {
+                            if (state!!.isPermissionGranted.value!!) {
+                                if (state!!.isTracking) {
+                                    viewModel.onEvent(TrackerEventKt.StopTrackingKt)
+                                    showTrackerOffUI()
+                                } else {
+                                    viewModel.onEvent(TrackerEventKt.StartTrackingKt)
+                                    showTrackerOnUI()
+                                }
+                            } else {
+                                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                                askUserForOpeningAppSettings()
+                            }
+                        },
+                        enabled = !isGpsOff,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(buttonColor),
+                            disabledContainerColor = webOrange
+                        ),
+                        shape = RoundedCornerShape(15.dp),
+                        border = BorderStroke(3.dp, Color(buttonBorderColor))
+                    ) {
+                        Text(
+                            text = buttonText,
+                            color = Color(buttonTextColor)
+                        )
+                    }
+                }
             }
         }
-
-        state!!.isPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
-            if (isGranted) {
-                hideNeedPermissionMessage()
-            } else {
-                showNeedPermissionMessage()
-            }
-        }
-    }
-
-    private fun showTrackerOffUI() {
-        binding!!.trackerOffInclude.root.visibility = View.VISIBLE
-        binding!!.trackerWorkingInclude.root.visibility = View.GONE
-        binding!!.trackerGpsOffInclude.root.visibility = View.GONE
-        binding!!.startStopButton.setText(R.string.start_button_text)
-        binding!!.startStopButton.setTextColor(-0x1)
-        binding!!.startStopButton.backgroundTintList = ColorStateList.valueOf(-0x5600)
-        binding!!.startStopButton.isEnabled = true
-    }
-
-    private fun showTrackerOnUI() {
-        binding!!.trackerOffInclude.root.visibility = View.GONE
-        binding!!.trackerWorkingInclude.root.visibility = View.VISIBLE
-        binding!!.trackerGpsOffInclude.root.visibility = View.GONE
-        binding!!.startStopButton.setText(R.string.stop_button_text)
-        binding!!.startStopButton.setTextColor(-0x5600)
-        binding!!.startStopButton.backgroundTintList = ColorStateList.valueOf(-0x1)
-        binding!!.startStopButton.isEnabled = true
-    }
-
-    private fun showGPSOffUI() {
-        binding!!.trackerOffInclude.root.visibility = View.GONE
-        binding!!.trackerWorkingInclude.root.visibility = View.GONE
-        binding!!.trackerGpsOffInclude.root.visibility = View.VISIBLE
-        binding!!.startStopButton.setText(R.string.start_button_text)
-        binding!!.startStopButton.setTextColor(-0x1)
-        binding!!.startStopButton.backgroundTintList = ColorStateList.valueOf(-0x5600)
-        binding!!.startStopButton.isEnabled = false
-    }
-
-    private fun showNeedPermissionMessage() {
-        binding!!.startStopButton.setBackgroundColor(Color.GRAY)
-        binding!!.startStopButton.strokeColor = ColorStateList.valueOf(Color.RED)
-        binding!!.permissionMessage.visibility = View.VISIBLE
-    }
-
-    private fun hideNeedPermissionMessage() {
-        dialog?.hide()
-        binding!!.startStopButton.setBackgroundColor(resources.getColor(R.color.web_orange))
-        binding!!.startStopButton.strokeColor =
-            ColorStateList.valueOf(resources.getColor(R.color.web_orange))
-        binding!!.permissionMessage.visibility = View.GONE
     }
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            hideNeedPermissionMessage()
             viewModel.onEvent(TrackerEventKt.SetPermissionState(true))
         } else {
-            showNeedPermissionMessage()
             viewModel.onEvent(TrackerEventKt.SetPermissionState(false))
         }
     }
