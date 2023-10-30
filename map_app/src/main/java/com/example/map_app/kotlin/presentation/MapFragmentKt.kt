@@ -4,6 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,49 +28,26 @@ import com.example.authentication.kotlin.AuthenticationEventKt
 import com.example.map_app.R
 import com.example.map_app.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.concurrent.atomic.AtomicReference
 
 @AndroidEntryPoint
 class MapFragmentKt : Fragment(), CalendarDialogKt.DatePickerEventListener {
     private var binding: FragmentMapsBinding? = null
     private val viewModel: MapViewModelKt by viewModels()
     private var isShownDialog = false
-    private val polyline = AtomicReference<Polyline>()
 
     companion object {
         private var authenticationEvent: AuthenticationEventKt? = null
         fun setAuthenticationEvent(event: AuthenticationEventKt) {
             authenticationEvent = event
-        }
-    }
-
-    private fun createOnMapReadyCallback(path: Flow<PolylineOptions>): OnMapReadyCallback {
-        return OnMapReadyCallback { googleMap ->
-            lifecycleScope.launch {
-                path.collect {
-                    if (it.points.isNotEmpty()) {
-                        polyline.get()?.remove()
-                        polyline.set(googleMap.addPolyline(it))
-                        googleMap.moveCamera(
-                            CameraUpdateFactory.newLatLng(
-                                it.points[0]
-                            )
-                        )
-                    } else {
-                        polyline.get()?.remove()
-                    }
-                }
-            }
         }
     }
 
@@ -68,60 +62,113 @@ class MapFragmentKt : Fragment(), CalendarDialogKt.DatePickerEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModelState()
 
-        // Log out
-        binding!!.toolbarExitIcon.setOnClickListener {
-            authenticationEvent?.logOut()
-        }
+        binding!!.composeMapFragment.setContent {
+            val last24h = stringResource(id = R.string.last_24_h)
+            var selectedDateText by rememberSaveable { mutableStateOf(last24h) }
+            val cameraPositionState = rememberCameraPositionState()
+            var points: List<LatLng>? = null
 
-        // Open calendar dialog
-        binding!!.toolbarCalendarIcon.setOnClickListener {
-            if (!isShownDialog) {
-                lifecycleScope.launch {
-                    viewModel.mapIntent.send(MapIntent.ShowDialog)
-                }
-            } else {
-                lifecycleScope.launch {
-                    viewModel.mapIntent.send(MapIntent.HideDialog)
-                }
-            }
-        }
-    }
-
-    private fun observeViewModelState() {
-        lifecycleScope.launch {
-            viewModel.state.collect {
-                when (it) {
-                    MapStateKt.ShowDialog -> {
-                        binding!!.calendarDialog.visibility = View.VISIBLE
-                        isShownDialog = true
-                    }
-
-                    MapStateKt.HideDialog -> {
-                        binding!!.calendarDialog.visibility = View.GONE
-                        isShownDialog = false
-                    }
-
-                    is MapStateKt.ShowPath -> {
-                        val mapFragment =
-                            getChildFragmentManager().findFragmentById(R.id.map) as SupportMapFragment?
-                        mapFragment?.getMapAsync(createOnMapReadyCallback(it.flow))
-                        setupBottomMessage(it.date)
-                    }
+            fun setupBottomMessage(selectedDate: LocalDate) {
+                selectedDateText = if (selectedDate.isEqual(LocalDate.now())) {
+                    last24h
+                } else {
+                    val pattern =
+                        DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                    val formattedDate = selectedDate.format(pattern)
+                    formattedDate
                 }
             }
-        }
-    }
 
-    private fun setupBottomMessage(selectedDate: LocalDate) {
-        if (selectedDate.isEqual(LocalDate.now())) {
-            binding!!.timeTextView.setText(R.string.last_24_h)
-        } else {
-            val pattern =
-                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
-            val formattedDate = selectedDate.format(pattern)
-            binding!!.timeTextView.text = formattedDate
+            fun observeViewModelState() {
+                lifecycleScope.launch {
+                    viewModel.state.collect {
+                        when (it) {
+                            MapStateKt.ShowDialog -> {
+                                binding!!.calendarDialog.visibility = View.VISIBLE
+                                isShownDialog = true
+                            }
+
+                            MapStateKt.HideDialog -> {
+                                binding!!.calendarDialog.visibility = View.GONE
+                                isShownDialog = false
+                            }
+
+                            is MapStateKt.ShowPath -> {
+                                it.flow.collect { polylineOptions ->
+                                    val currentPoints = polylineOptions.points
+                                    if (currentPoints.isNotEmpty()) {
+                                        points = currentPoints
+                                        cameraPositionState.move(
+                                            CameraUpdateFactory.newLatLng(
+                                                currentPoints[0]
+                                            )
+                                        )
+                                    } else {
+                                        points = null
+                                    }
+                                }
+                                setupBottomMessage(it.date)
+                            }
+                        }
+                    }
+                }
+            }
+
+            observeViewModelState()
+
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        modifier = Modifier,
+                        exitButtonEvent = { authenticationEvent?.logOut() },
+                        calendarButtonEvent = {
+                            if (!isShownDialog) {
+                                lifecycleScope.launch {
+                                    viewModel.mapIntent.send(MapIntent.ShowDialog)
+                                }
+                            } else {
+                                lifecycleScope.launch {
+                                    viewModel.mapIntent.send(MapIntent.HideDialog)
+                                }
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.8f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GoogleMap(
+                            cameraPositionState = cameraPositionState
+                        ) {
+                            Polyline(points = points ?: emptyList())
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(83.dp)
+                            .background(colorResource(id = R.color.dark_gray)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        BottomClockIcon(
+                            modifier = Modifier,
+                            selectedDateText = selectedDateText
+                        )
+                    }
+                }
+            }
         }
     }
 

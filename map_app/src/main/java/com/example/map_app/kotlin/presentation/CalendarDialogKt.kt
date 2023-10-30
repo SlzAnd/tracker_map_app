@@ -1,6 +1,5 @@
 package com.example.map_app.kotlin.presentation
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import com.example.map_app.databinding.DialogCalendarBinding
 import java.time.LocalDate
+
 
 class CalendarDialogKt : DialogFragment() {
 
     private var binding: DialogCalendarBinding? = null
     private var datePickerEventListener: DatePickerEventListener? = null
-    private var selectedDate = LocalDate.now()
 
     private val TAG = "CalendarDialogKt"
 
@@ -24,14 +28,6 @@ class CalendarDialogKt : DialogFragment() {
         fun onCloseDialog()
 
         fun onSelectDate(date: LocalDate)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -46,21 +42,27 @@ class CalendarDialogKt : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding!!.calendarView.setOnDateChangeListener { _, year, month, day ->
-            selectedDate = LocalDate.of(year, month + 1, day)
-        }
+        binding!!.composeDatePicker.setContent {
+            val selectedDate = remember { mutableStateOf(LocalDate.now()) }
 
-        binding!!.okButton.setOnClickListener {
-            if (selectedDate.isAfter(LocalDate.now())) {
-                Toast.makeText(
-                    requireContext(),
-                    "You can't choose future date!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                datePickerEventListener?.onSelectDate(selectedDate)
-                datePickerEventListener?.onCloseDialog()
-            }
+            CalendarDialog(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                onDateSelected = {
+                    selectedDate.value = it
+                },
+                onOkButtonEvent = {
+                    if (selectedDate.value.isAfter(LocalDate.now())) {
+                        Toast.makeText(
+                            requireContext(),
+                            "You can't choose future date!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        datePickerEventListener?.onSelectDate(selectedDate.value)
+                        datePickerEventListener?.onCloseDialog()
+                    }
+                }
+            )
         }
     }
 

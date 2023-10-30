@@ -7,5 +7,10 @@
         <item name="android:statusBarColor">@color/web_orange</item>
     </style>
 
+    <style name="CalenderViewCustom" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorAccent">@color/web_orange</item>
+    </style>
+
+
     <style name="Theme.Tracker_task" parent="Base.Theme.Tracker_task" />
 </resources>
