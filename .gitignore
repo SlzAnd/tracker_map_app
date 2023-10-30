@@ -13,6 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-authentication/google-services.json
-tracker_app/google-services.json
-map_app/google-services.json
+google-services.json
